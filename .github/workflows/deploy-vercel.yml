@@ -17,7 +17,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-    # 👉 Cuando tengas tests descomenta estas líneas
     # - name: Run tests
     #   run: npm run test
 
@@ -26,17 +25,15 @@ jobs:
 
       - name: Deploy to Vercel
         env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           echo "Branch: ${{ github.ref }}"
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
             echo "Deploying to Production (master)..."
-            vercel --prod --confirm --token=$VERCEL_TOKEN --org-id=$VERCEL_ORG_ID --project-id=$VERCEL_PROJECT_ID
+            vercel --prod --confirm --token=$VERCEL_TOKEN
           elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
             echo "Deploying to Preview (develop)..."
-            vercel --confirm --token=$VERCEL_TOKEN --org-id=$VERCEL_ORG_ID --project-id=$VERCEL_PROJECT_ID
+            vercel --confirm --token=$VERCEL_TOKEN
           else
             echo "Branch ${{ github.ref }} not configured for deploy. Skipping."
           fi
